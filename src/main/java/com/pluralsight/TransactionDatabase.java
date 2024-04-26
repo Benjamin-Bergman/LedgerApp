@@ -65,8 +65,11 @@ final class TransactionDatabase implements Closeable {
         assertGoodFile();
         try (var fw = new FileWriter(filePath);
              var bw = new BufferedWriter(fw)) {
-            for (Transaction transaction : transactions)
+            for (Transaction transaction : transactions) {
                 bw.write(transaction.serialize());
+                bw.write(System.lineSeparator());
+            }
+            bw.flush();
         }
     }
 
