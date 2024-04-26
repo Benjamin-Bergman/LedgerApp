@@ -9,7 +9,12 @@ import java.io.*;
 
 final class Program {
     public static void main(String[] args) {
-        try (var screen = new DefaultTerminalFactory().createScreen()) {
+        if (args.length < 1) System.out.println("No database file provided, using the default...");
+        String location = (args.length < 1) ? "Transactions.csv" : args[0];
+
+        try (var screen = new DefaultTerminalFactory().createScreen();
+             var db = new TransactionDatabase(new File(location))
+        ) {
             screen.startScreen();
 
             var gui = new MultiWindowTextGUI(screen);
