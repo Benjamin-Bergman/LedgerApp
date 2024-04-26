@@ -48,7 +48,7 @@ public record Transaction(LocalDateTime dateTime, String description, String ven
 
     @Override
     public String toString() {
-        return "[%tY-%<tm-%<td %<tH:%<tM:%<TS] %.2f %s %s for %s".formatted(
+        return "[%tY-%<tm-%<td %<tH:%<tM:%<TS] $%.2f %s %s for %s".formatted(
             dateTime,
             Math.abs(amount),
             (amount > 0) ? "from" : "to",
@@ -76,6 +76,6 @@ public record Transaction(LocalDateTime dateTime, String description, String ven
      * @return A CSV representation of this transaction.
      */
     public String serialize() {
-        return "%s,%s,%s,%s".formatted(dateTime, description, vendor, amount);
+        return "%s,%s,%s,%.2f".formatted(dateTime, description, vendor, amount);
     }
 }
