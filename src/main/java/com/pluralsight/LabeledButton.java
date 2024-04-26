@@ -57,13 +57,14 @@ final class LabeledButton extends Button {
 
     @Override
     public synchronized Result handleKeyStroke(KeyStroke keyStroke) {
-        if (keyStroke.getKeyType() != KeyType.Character)
-            return Result.UNHANDLED;
-        if (!keyStroke.getCharacter().toString().equalsIgnoreCase(String.valueOf(highlighted)))
-            return Result.UNHANDLED;
-
-        triggerActions();
-        return Result.HANDLED;
+        if (
+            (keyStroke.getKeyType() == KeyType.Character) &&
+            keyStroke.getCharacter().toString().equalsIgnoreCase(String.valueOf(highlighted))
+        ) {
+            triggerActions();
+            return Result.HANDLED;
+        }
+        return super.handleKeyStroke(keyStroke);
     }
 
     private record LabeledButtonRenderer(int highlighted) implements ButtonRenderer {
@@ -103,6 +104,7 @@ final class LabeledButton extends Button {
 
             if (!button.isFocused()) {
                 textGUIGraphics.applyThemeStyle(themeDefinition.getPreLight());
+                textGUIGraphics.enableModifiers(SGR.UNDERLINE);
                 textGUIGraphics.setCharacter(1 + labelShift + highlighted, 0, button.getLabel().charAt(highlighted));
             }
         }
