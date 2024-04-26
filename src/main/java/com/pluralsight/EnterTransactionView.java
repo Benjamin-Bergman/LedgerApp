@@ -5,11 +5,15 @@ package com.pluralsight;
 import com.googlecode.lanterna.gui2.*;
 
 import java.util.*;
+import java.util.regex.*;
 
 /**
  * Represents the view for entering a row into a financial ledger.
  */
 final class EnterTransactionView extends BasicWindow {
+    private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)([0-9]*(?:\\.[0-9]{0,2})?)$");
+    private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.0*$");
+
     EnterTransactionView(boolean credit) {
         super(credit ? "Enter a Credit" : "Enter a Debit");
 
@@ -26,7 +30,9 @@ final class EnterTransactionView extends BasicWindow {
         var vendorInput = new TextBox().addTo(panel);
 
         amountInput.setTextChangeListener((text, user) -> {
-            amountInput.setBad(true);
+            var money = MONEY_PATTERN.matcher(text);
+            var zero = ZERO_PATTERN.matcher(text);
+            amountInput.setBad(!money.matches() || zero.matches());
         });
 
         setComponent(panel);
