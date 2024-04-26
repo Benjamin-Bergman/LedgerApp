@@ -2,8 +2,11 @@
 
 package com.pluralsight;
 
+import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.gui2.dialogs.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -14,7 +17,7 @@ final class EnterTransactionView extends BasicWindow {
     private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)([0-9]*(?:\\.[0-9]{0,2})?)$");
     private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.0*$");
 
-    EnterTransactionView(boolean credit) {
+    EnterTransactionView(boolean credit, TransactionDatabase db) {
         super(credit ? "Enter a Credit" : "Enter a Debit");
 
         setHints(List.of(Hint.MODAL, Hint.CENTERED));
@@ -35,6 +38,35 @@ final class EnterTransactionView extends BasicWindow {
             amountInput.setBad(!money.matches() || zero.matches());
         });
 
+        // Date input
+        // Time input
+
+        panel.addComponent(new EmptySpace(new TerminalSize(0, 0)));
+        panel.addComponent(new Button("Submit", () -> trySubmit(amountInput, itemInput, vendorInput, credit, db)));
+
         setComponent(panel);
+    }
+
+    private void trySubmit(ErrorTextBox amountInput, TextBox itemInput, TextBox vendorInput, boolean credit, TransactionDatabase db) {
+        if (amountInput.isBad()) new MessageDialogBuilder()
+            .setTitle("Error")
+            .setText("Invalid money amount!")
+            .addButton(MessageDialogButton.OK)
+            .build()
+            .showDialog(getTextGUI());
+        else if (new MessageDialogBuilder()
+                     .setTitle("Confirm")
+                     .setText("Are you sure?")
+                     .addButton(MessageDialogButton.Yes)
+                     .addButton(MessageDialogButton.Cancel)
+                     .build()
+                     .showDialog(getTextGUI()) == MessageDialogButton.Yes) {
+            db.addTransaction(new Transaction(
+                LocalDateTime.now(),
+                itemInput.getText(),
+                vendorInput.getText(),
+                (credit ? 1 : -1) * Double.parseDouble(amountInput.getText())));
+            close();
+        }
     }
 }

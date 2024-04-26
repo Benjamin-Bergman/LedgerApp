@@ -26,11 +26,11 @@ final class HomeView extends LabeledMenu {
     }
 
     private void showEnterCredits() {
-        getTextGUI().addWindowAndWait(new EnterTransactionView(true));
+        getTextGUI().addWindowAndWait(new EnterTransactionView(true, database));
     }
 
     private void showEnterDebits() {
-        getTextGUI().addWindowAndWait(new EnterTransactionView(false));
+        getTextGUI().addWindowAndWait(new EnterTransactionView(false, database));
     }
 
     private void showLedger() {

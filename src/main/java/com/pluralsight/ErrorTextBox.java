@@ -13,7 +13,11 @@ final class ErrorTextBox extends TextBox {
         setRenderer(new ErrorTextBoxRenderer());
     }
 
-    public void setBad(boolean isBad) {
+    boolean isBad() {
+        return !isGood;
+    }
+
+    void setBad(boolean isBad) {
         isGood = !isBad;
     }
 
