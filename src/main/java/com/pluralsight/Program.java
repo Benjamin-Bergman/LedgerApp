@@ -7,6 +7,7 @@ import com.googlecode.lanterna.terminal.*;
 
 import java.io.*;
 
+@SuppressWarnings("UtilityClass")
 final class Program {
     public static void main(String[] args) {
         if (args.length < 1) System.out.println("No database file provided, using the default...");

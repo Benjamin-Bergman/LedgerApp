@@ -11,6 +11,7 @@ import com.googlecode.lanterna.input.*;
  * Represents a {@link Button} with a highlighted character to indicate keyboard shortcuts.
  */
 final class LabeledButton extends Button {
+    @SuppressWarnings("FieldAccessedSynchronizedAndUnsynchronized")
     private char highlighted;
 
     /**

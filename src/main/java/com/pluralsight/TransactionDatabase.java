@@ -70,7 +70,7 @@ final class TransactionDatabase implements Closeable {
         }
     }
 
-    private void assertGoodFile() throws IOException {
+    private void assertGoodFile() {
         assert filePath.exists() && !filePath.isDirectory() : filePath.getAbsolutePath();
     }
 }
