@@ -14,14 +14,14 @@ import java.util.*;
  * @param vendor      Who this transaction was with.
  * @param amount      How much money this transaction exchanged.
  */
-public record Transaction(LocalDateTime dateTime, String description, String vendor, Double amount) {
+record Transaction(LocalDateTime dateTime, String description, String vendor, Double amount) {
     /**
      * Deserializes a transaction from a row of CSV.
      *
      * @param csv The CSV row to deserialize.
      * @return A CSV representation of this transaction, or {@code Optional.none()} if {@code csv} is invalid.
      */
-    public static Optional<Transaction> deserialize(String csv) {
+    static Optional<Transaction> deserialize(String csv) {
         if ((csv == null) || csv.isEmpty())
             return Optional.empty();
 
@@ -59,14 +59,14 @@ public record Transaction(LocalDateTime dateTime, String description, String ven
     /**
      * @return The date when this transaction occurred.
      */
-    public LocalDate date() {
+    LocalDate date() {
         return dateTime.toLocalDate();
     }
 
     /**
      * @return The time when this transaction occurred.
      */
-    public LocalTime time() {
+    LocalTime time() {
         return dateTime.toLocalTime();
     }
 
@@ -75,7 +75,7 @@ public record Transaction(LocalDateTime dateTime, String description, String ven
      *
      * @return A CSV representation of this transaction.
      */
-    public String serialize() {
+    String serialize() {
         return "%s,%s,%s,%.2f".formatted(dateTime, description, vendor, amount);
     }
 }
