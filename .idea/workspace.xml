@@ -35,6 +35,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Program.executor": "Run",
     "JUnit.All in LedgerApp.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "code.cleanup.on.save": "true",
@@ -43,6 +44,7 @@
     "extract.method.default.visibility": "private",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Work/Documents/YearUp/Java/LedgerApp",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.stylelint": "",
@@ -58,14 +60,33 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Work\Documents\YearUp\Java\LedgerApp" />
+    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.pluralsight" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="com.pluralsight" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Program">
+    <configuration name="Program" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.pluralsight.Program" />
+      <module name="LedgerApp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pluralsight.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="All in LedgerApp" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="LedgerApp" />
       <option name="PACKAGE_NAME" value="" />
@@ -76,6 +97,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Program" />
         <item itemvalue="JUnit.All in LedgerApp" />
       </list>
     </recent_temporary>
@@ -96,7 +118,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1712861896002</updated>
-      <workItem from="1714138812092" duration="6198000" />
+      <workItem from="1714138812092" duration="7652000" />
     </task>
     <servers />
   </component>

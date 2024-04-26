@@ -18,7 +18,7 @@ final class Program {
             screen.startScreen();
 
             var gui = new MultiWindowTextGUI(screen);
-            var window = new BasicWindow();
+            var window = new HomeView(db);
             gui.addWindow(window);
             window.waitUntilClosed();
 
