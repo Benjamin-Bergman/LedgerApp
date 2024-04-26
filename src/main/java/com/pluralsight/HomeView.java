@@ -29,10 +29,10 @@ final class HomeView extends BasicWindow {
         var justify = LinearLayout.createLayoutData(Alignment.Fill, GrowPolicy.CanGrow);
 
         var buttons = new Button[]{
-            new Button("Enter Credits"),
-            new Button("Enter Debits"),
-            new Button("Show Ledger"),
-            new Button("Exit", this::close),
+            new LabeledButton("Enter Credits", 'C'),
+            new LabeledButton("Enter Debits", 'D'),
+            new LabeledButton("Show Ledger", 'L'),
+            new LabeledButton("Exit", 'x', this::close),
         };
 
         for (var button : buttons)
