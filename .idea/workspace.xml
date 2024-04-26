@@ -28,9 +28,9 @@
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2fdlPMKd9IypY6qrQZjFDHbYsSu" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />

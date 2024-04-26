@@ -19,6 +19,7 @@ final class ErrorTextBox extends TextBox {
 
     void setBad(boolean isBad) {
         isGood = !isBad;
+        invalidate();
     }
 
     private class ErrorTextBoxRenderer extends DefaultTextBoxRenderer {
