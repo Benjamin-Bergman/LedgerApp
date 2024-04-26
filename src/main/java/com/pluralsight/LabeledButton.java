@@ -5,6 +5,7 @@ package com.pluralsight;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.*;
 import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.input.*;
 
 /**
  * Represents a {@link Button} with a highlighted character to indicate keyboard shortcuts.
@@ -51,6 +52,17 @@ final class LabeledButton extends Button {
     @Override
     protected ButtonRenderer createDefaultRenderer() {
         return new LabeledButtonRenderer(getLabel().indexOf(highlighted));
+    }
+
+    @Override
+    public synchronized Result handleKeyStroke(KeyStroke keyStroke) {
+        if (keyStroke.getKeyType() != KeyType.Character)
+            return Result.UNHANDLED;
+        if (!keyStroke.getCharacter().toString().equalsIgnoreCase(String.valueOf(highlighted)))
+            return Result.UNHANDLED;
+
+        triggerActions();
+        return Result.HANDLED;
     }
 
     private record LabeledButtonRenderer(int highlighted) implements ButtonRenderer {
