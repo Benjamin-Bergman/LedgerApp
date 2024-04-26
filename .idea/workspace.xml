@@ -22,11 +22,6 @@
   <component name="FormatOnSaveOptions">
     <option name="myRunOnSave" value="true" />
   </component>
-  <component name="JavaAutoRunManager">
-    <enabled-run-configurations>
-      <run-configuration type="JUnit" name="All in LedgerApp" />
-    </enabled-run-configurations>
-  </component>
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
   </component>
@@ -100,7 +95,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1712861896002</updated>
-      <workItem from="1714138812092" duration="3945000" />
+      <workItem from="1714138812092" duration="4739000" />
     </task>
     <servers />
   </component>
