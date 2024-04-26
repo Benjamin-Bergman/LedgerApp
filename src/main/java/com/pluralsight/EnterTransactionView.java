@@ -5,6 +5,7 @@ package com.pluralsight;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.dialogs.*;
+import com.googlecode.lanterna.input.*;
 
 import java.time.*;
 import java.util.*;
@@ -17,20 +18,23 @@ final class EnterTransactionView extends BasicWindow {
     private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)([0-9]*(?:\\.[0-9]{0,2})?)$");
     private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.0*$");
 
+    private final ErrorTextBox amountInput;
+    private final TextBox itemInput, vendorInput;
+
     EnterTransactionView(boolean credit, TransactionDatabase db) {
         super(credit ? "Enter a Credit" : "Enter a Debit");
 
         setHints(List.of(Hint.MODAL, Hint.CENTERED));
-        setCloseWindowWithEscape(true);
 
         Panel panel = new Panel(new GridLayout(2));
         new Label("Amount").addTo(panel);
-        var amountInput = new ErrorTextBox();
+        amountInput = new ErrorTextBox();
+        amountInput.setBad(true);
         panel.addComponent(amountInput);
         new Label("Item").addTo(panel);
-        var itemInput = new TextBox().addTo(panel);
+        itemInput = new TextBox().addTo(panel);
         new Label("Vendor").addTo(panel);
-        var vendorInput = new TextBox().addTo(panel);
+        vendorInput = new TextBox().addTo(panel);
 
         amountInput.setTextChangeListener((text, user) -> {
             var money = MONEY_PATTERN.matcher(text);
@@ -42,12 +46,38 @@ final class EnterTransactionView extends BasicWindow {
         // Time input
 
         panel.addComponent(new EmptySpace(new TerminalSize(0, 0)));
-        panel.addComponent(new Button("Submit", () -> trySubmit(amountInput, itemInput, vendorInput, credit, db)));
+        panel.addComponent(new Button("Submit", () -> trySubmit(credit, db)));
 
         setComponent(panel);
     }
 
-    private void trySubmit(ErrorTextBox amountInput, TextBox itemInput, TextBox vendorInput, boolean credit, TransactionDatabase db) {
+    @Override
+    public boolean handleInput(KeyStroke key) {
+        if (key.getKeyType() == KeyType.Escape)
+            tryClose();
+
+        return super.handleInput(key);
+    }
+
+    private void tryClose() {
+        if (amountInput.getText().isEmpty()
+            && itemInput.getText().isEmpty()
+            && vendorInput.getText().isEmpty()) {
+            close();
+            return;
+        }
+
+        if (new MessageDialogBuilder()
+                .setTitle("Cancel")
+                .setText("Are you sure you want to exit?")
+                .addButton(MessageDialogButton.Yes)
+                .addButton(MessageDialogButton.No)
+                .build()
+                .showDialog(getTextGUI()) == MessageDialogButton.Yes)
+            close();
+    }
+
+    private void trySubmit(boolean credit, TransactionDatabase db) {
         if (amountInput.isBad()) new MessageDialogBuilder()
             .setTitle("Error")
             .setText("Invalid money amount!")
