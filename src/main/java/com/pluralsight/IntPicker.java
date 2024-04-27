@@ -8,11 +8,14 @@ import com.googlecode.lanterna.gui2.Window.*;
 import com.googlecode.lanterna.input.*;
 
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 class IntPicker extends AbstractInteractableComponent<IntPicker> {
     private final int defaultValue;
-    private int maxValue, minValue, selectedValue, weakMax;
-    private boolean isListFocused, isTyping;
+    private final List<IntConsumer> onUpdateSubscribers;
+    private int maxValue, minValue, selectedValue, weakMax, maxDigits;
+    private boolean isListFocused;
     private String format;
     private Window popup;
 
@@ -20,21 +23,25 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
         this.defaultValue = defaultValue;
         selectedValue = defaultValue;
         isListFocused = false;
-        isTyping = false;
         //noinspection AssignmentToNull
         popup = null;
+        onUpdateSubscribers = new CopyOnWriteArrayList<>();
         this.minValue = minValue;
         setMaxValue(maxValue);
+    }
+
+    public final void onUpdate(IntConsumer consumer) {
+        onUpdateSubscribers.add(consumer);
     }
 
     public final void setMaxValue(int maxValue) {
         this.maxValue = maxValue;
         //noinspection NumericCastThatLosesPrecision
-        int digits = (int) Math.log10(maxValue) + 1;
+        maxDigits = (int) Math.log10(maxValue) + 1;
         //noinspection StringConcatenationMissingWhitespace
-        format = "%0" + digits + 'd';
+        format = "%0" + maxDigits + 'd';
         //noinspection NumericCastThatLosesPrecision
-        weakMax = (int) Math.pow(10, digits);
+        weakMax = (int) Math.pow(10, maxDigits);
         invalidate();
     }
 
@@ -43,7 +50,7 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
         invalidate();
     }
 
-    public boolean hasChanged() {
+    public boolean isDefault() {
         return defaultValue != getSelectedValue();
     }
 
@@ -61,6 +68,8 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
 
     private void setSelection(int value) {
         selectedValue = value;
+        var computed = getSelectedValue();
+        onUpdateSubscribers.forEach(consumer -> consumer.accept(computed));
         invalidate();
     }
 
@@ -93,9 +102,6 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
         if (popup != null)
             popup.close();
 
-        setSelection(getSelectedValue());
-        isTyping = false;
-
         super.afterLeaveFocus(direction, nextInFocus);
     }
 
@@ -104,7 +110,7 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
         return new IntPickerRenderer();
     }
 
-    @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
+    @SuppressWarnings("OverlyComplexMethod")
     @Override
     protected Result handleKeyStroke(KeyStroke keyStroke) {
         if (keyStroke.getKeyType() == KeyType.Character) {
@@ -112,13 +118,11 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
             int i = "0123456789".indexOf(c);
             if (i != -1) {
                 setSelection(((selectedValue * 10) + i) % weakMax);
-                isTyping = true;
                 return Result.HANDLED;
             }
         }
         if (keyStroke.getKeyType() == KeyType.Backspace) {
             setSelection(selectedValue / 10);
-            isTyping = true;
             return Result.HANDLED;
         }
         if (!isListFocused && isActivationStroke(keyStroke)) {
@@ -161,7 +165,7 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
 
         @Override
         public TerminalSize getPreferredSize(IntPicker intPicker) {
-            return new TerminalSize(4, 1);
+            return new TerminalSize(maxDigits, 1);
         }
 
         @Override
@@ -170,7 +174,7 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
 
             textGUIGraphics.applyThemeStyle(isFocused() ? definition.getPreLight() : definition.getNormal());
 
-            textGUIGraphics.putString((getSize().getColumns() - 4) / 2, 0, format.formatted(isTyping ? selectedValue : getSelectedValue()));
+            textGUIGraphics.putString((getSize().getColumns() - maxDigits) / 2, 0, format.formatted(isFocused() ? selectedValue : getSelectedValue()));
         }
     }
 
@@ -184,7 +188,7 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
         private class IntPickerPopupRenderer implements ComponentRenderer<IntPickerPopup> {
             @Override
             public TerminalSize getPreferredSize(IntPickerPopup intPickerPopup) {
-                return new TerminalSize(4, 3);
+                return new TerminalSize(maxDigits, 3);
             }
 
             @Override
@@ -194,7 +198,7 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
                 textGUIGraphics.putString(0, 0, format.formatted(successor(getSelectedValue())));
                 textGUIGraphics.putString(0, 2, format.formatted(predecessor(getSelectedValue())));
                 textGUIGraphics.applyThemeStyle(definition.getActive());
-                textGUIGraphics.putString(0, 1, format.formatted(isTyping ? selectedValue : getSelectedValue()));
+                textGUIGraphics.putString(0, 1, format.formatted(selectedValue));
             }
         }
     }

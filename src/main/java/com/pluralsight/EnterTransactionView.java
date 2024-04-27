@@ -16,10 +16,11 @@ import java.util.regex.*;
  */
 final class EnterTransactionView extends BasicWindow {
     private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)([0-9]*(?:\\.[0-9]{0,2})?)$");
-    private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.0*$");
+    private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.?0*$");
 
     private final ErrorTextBox amountInput;
     private final TextBox itemInput, vendorInput;
+    private final DatePicker dateInput;
 
     EnterTransactionView(boolean credit, TransactionDatabase db) {
         super(credit ? "Enter a Credit" : "Enter a Debit");
@@ -35,6 +36,10 @@ final class EnterTransactionView extends BasicWindow {
         itemInput = new TextBox().addTo(panel);
         new Label("Vendor").addTo(panel);
         vendorInput = new TextBox().addTo(panel);
+
+        new Label("Date").addTo(panel);
+        dateInput = new DatePicker();
+        panel.addComponent(dateInput);
 
         amountInput.setTextChangeListener((text, user) -> {
             var money = MONEY_PATTERN.matcher(text);
@@ -62,7 +67,8 @@ final class EnterTransactionView extends BasicWindow {
     private void tryClose() {
         if (amountInput.getText().isEmpty()
             && itemInput.getText().isEmpty()
-            && vendorInput.getText().isEmpty()) {
+            && vendorInput.getText().isEmpty()
+            && dateInput.isDefault()) {
             close();
             return;
         }
@@ -92,7 +98,7 @@ final class EnterTransactionView extends BasicWindow {
                      .build()
                      .showDialog(getTextGUI()) == MessageDialogButton.Yes) {
             db.addTransaction(new Transaction(
-                LocalDateTime.now(),
+                LocalDateTime.of(dateInput.dateValue(), LocalTime.now()),
                 itemInput.getText(),
                 vendorInput.getText(),
                 (credit ? 1 : -1) * Double.parseDouble(amountInput.getText())));
