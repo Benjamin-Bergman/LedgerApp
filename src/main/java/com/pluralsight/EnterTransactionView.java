@@ -22,6 +22,7 @@ final class EnterTransactionView extends BasicWindow {
     private final ErrorTextBox amountInput;
     private final TextBox itemInput, vendorInput;
     private final DatePicker dateInput;
+    private final TimePicker timeInput;
 
     EnterTransactionView(boolean credit, TransactionDatabase db) {
         super(credit ? "Enter a Credit" : "Enter a Debit");
@@ -42,14 +43,15 @@ final class EnterTransactionView extends BasicWindow {
         dateInput = new DatePicker();
         panel.addComponent(dateInput);
 
+        new Label("Time").addTo(panel);
+        timeInput = new TimePicker();
+        panel.addComponent(timeInput);
+
         amountInput.setTextChangeListener((text, user) -> {
             var money = MONEY_PATTERN.matcher(text);
             var zero = ZERO_PATTERN.matcher(text);
             amountInput.setBad(!money.matches() || zero.matches());
         });
-
-        // Date input
-        // Time input
 
         panel.addComponent(new EmptySpace(new TerminalSize(0, 0)));
         panel.addComponent(new Button("Submit", () -> trySubmit(credit, db)));
@@ -69,7 +71,8 @@ final class EnterTransactionView extends BasicWindow {
         if (amountInput.getText().isEmpty()
             && itemInput.getText().isEmpty()
             && vendorInput.getText().isEmpty()
-            && dateInput.isDefault()) {
+            && dateInput.isDefault()
+            && timeInput.isDefault()) {
             close();
             return;
         }
@@ -99,7 +102,7 @@ final class EnterTransactionView extends BasicWindow {
                      .build()
                      .showDialog(getTextGUI()) == MessageDialogButton.Yes) {
             db.addTransaction(new Transaction(
-                LocalDateTime.of(dateInput.dateValue(), LocalTime.now()),
+                LocalDateTime.of(dateInput.dateValue(), timeInput.timeValue()),
                 itemInput.getText(),
                 vendorInput.getText(),
                 (credit ? 1 : -1) * Double.parseDouble(
