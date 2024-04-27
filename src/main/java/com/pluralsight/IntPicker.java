@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-class IntPicker extends AbstractInteractableComponent<IntPicker> {
+/**
+ * Represents a picker that lets users select an integer from within a specified range.
+ * The range is inclusive on both ends.
+ */
+public class IntPicker extends AbstractInteractableComponent<IntPicker> {
     private final int defaultValue;
     private final List<IntConsumer> onUpdateSubscribers;
     private int maxValue, minValue, selectedValue, weakMax, maxDigits;
@@ -19,7 +23,12 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
     private String format;
     private Window popup;
 
-    IntPicker(int defaultValue, int minValue, int maxValue) {
+    /**
+     * @param defaultValue The initial value to select.
+     * @param minValue     The minimum value to allow (inclusive).
+     * @param maxValue     The maximum value to allow (inclusive).
+     */
+    public IntPicker(int defaultValue, int minValue, int maxValue) {
         this.defaultValue = defaultValue;
         selectedValue = defaultValue;
         isListFocused = false;
@@ -30,10 +39,20 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
         setMaxValue(maxValue);
     }
 
+    /**
+     * Subscribes to changes in this picker's value.
+     *
+     * @param consumer A callback to be run when the value changes.
+     */
     public final void onUpdate(IntConsumer consumer) {
         onUpdateSubscribers.add(consumer);
     }
 
+    /**
+     * Sets the maximum value for this picker.
+     *
+     * @param maxValue The inclusive upper bound.
+     */
     public final void setMaxValue(int maxValue) {
         this.maxValue = maxValue;
         //noinspection NumericCastThatLosesPrecision
@@ -45,15 +64,26 @@ class IntPicker extends AbstractInteractableComponent<IntPicker> {
         invalidate();
     }
 
+    /**
+     * Sets the minimum value for this picker.
+     *
+     * @param minValue The inclusive lower bound.
+     */
     public final void setMinValue(int minValue) {
         this.minValue = minValue;
         invalidate();
     }
 
+    /**
+     * @return {@code true} if the currently selected int is its default value.
+     */
     public boolean isDefault() {
         return defaultValue != getSelectedValue();
     }
 
+    /**
+     * @return The currently selected value.
+     */
     public int getSelectedValue() {
         return Math.min(Math.max(selectedValue, minValue), maxValue);
     }
