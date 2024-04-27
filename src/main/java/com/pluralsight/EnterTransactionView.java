@@ -15,7 +15,7 @@ import java.util.regex.*;
  * Represents the view for entering a row into a financial ledger.
  */
 final class EnterTransactionView extends BasicWindow {
-    private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)([0-9]*(?:\\.[0-9]{0,2})?)$");
+    private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)[0-9]*(?:\\.[0-9]{0,2})?$");
     private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.?0*$");
 
     private final ErrorTextBox amountInput;
@@ -101,7 +101,10 @@ final class EnterTransactionView extends BasicWindow {
                 LocalDateTime.of(dateInput.dateValue(), LocalTime.now()),
                 itemInput.getText(),
                 vendorInput.getText(),
-                (credit ? 1 : -1) * Double.parseDouble(amountInput.getText())));
+                (credit ? 1 : -1) * Double.parseDouble(
+                    amountInput.getText().replace('$', ' ')
+                ))
+            );
             close();
         }
     }
