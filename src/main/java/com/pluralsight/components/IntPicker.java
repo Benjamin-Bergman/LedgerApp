@@ -78,7 +78,7 @@ public class IntPicker extends AbstractInteractableComponent<IntPicker> {
      * @return {@code true} if the currently selected int is its default value.
      */
     public boolean isDefault() {
-        return defaultValue != getSelectedValue();
+        return defaultValue == getSelectedValue();
     }
 
     /**

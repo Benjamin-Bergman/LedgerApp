@@ -11,7 +11,8 @@ import java.time.*;
  */
 @SuppressWarnings("FeatureEnvy")
 public final class DatePicker extends Panel {
-    private final IntPicker monthPicker, dayPicker, yearPicker;
+    private final IntPicker dayPicker, yearPicker;
+    private final MonthPicker monthPicker;
 
     /**
      * Creates a new instance whose default value is {@code LocalDate.now()}.
@@ -27,7 +28,7 @@ public final class DatePicker extends Panel {
      */
     public DatePicker(LocalDate defaultDate) {
         super(new LinearLayout(Direction.HORIZONTAL));
-        monthPicker = new IntPicker(defaultDate.getMonthValue(), 1, 12);
+        monthPicker = new MonthPicker(defaultDate.getMonth());
         dayPicker = new IntPicker(defaultDate.getDayOfMonth(), 1, defaultDate.lengthOfMonth());
         yearPicker = new IntPicker(defaultDate.getYear(), 0, 9_999);
         addComponent(monthPicker);
