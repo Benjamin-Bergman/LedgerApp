@@ -2,7 +2,6 @@
 
 package com.pluralsight;
 
-import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.dialogs.*;
 import com.googlecode.lanterna.input.*;
@@ -53,7 +52,7 @@ final class EnterTransactionView extends BasicWindow {
             amountInput.setBad(!money.matches() || zero.matches());
         });
 
-        panel.addComponent(new EmptySpace(new TerminalSize(0, 0)));
+        panel.addComponent(new Button("Exit", this::tryClose));
         panel.addComponent(new Button("Submit", () -> trySubmit(credit, db)));
 
         setComponent(panel);
@@ -78,7 +77,7 @@ final class EnterTransactionView extends BasicWindow {
         }
 
         if (new MessageDialogBuilder()
-                .setTitle("Cancel")
+                .setTitle("Confirm")
                 .setText("Are you sure you want to exit?")
                 .addButton(MessageDialogButton.Yes)
                 .addButton(MessageDialogButton.No)
