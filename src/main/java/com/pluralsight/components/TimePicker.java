@@ -12,6 +12,7 @@ import java.time.temporal.*;
 /**
  * Represents a picker that lets users select a time.
  */
+@SuppressWarnings("FeatureEnvy")
 public final class TimePicker extends Panel {
     private final IntPicker hourPicker, minutePicker;
     private final AMPMPicker ampmPicker;
@@ -34,6 +35,11 @@ public final class TimePicker extends Panel {
         hourPicker = new IntPicker(defaultTime.getHour(), 1, 12);
         minutePicker = new IntPicker(defaultTime.getMinute(), 0, 59);
         ampmPicker = new AMPMPicker(defaultTime.get(ChronoField.AMPM_OF_DAY) == 0);
+        hourPicker.onRollover(x -> ampmPicker.setIsAM(!ampmPicker.isAM()));
+        minutePicker.onRollover(x -> {
+            if (x) hourPicker.increment();
+            else hourPicker.decrement();
+        });
         addComponent(hourPicker);
         addComponent(new Label(":"));
         addComponent(minutePicker);
@@ -63,6 +69,10 @@ public final class TimePicker extends Panel {
         AMPMPicker(boolean isAM) {
             this.isAM = isAM;
             defaultValue = isAM;
+        }
+
+        public void setIsAM(boolean iaAM) {
+            isAM = iaAM;
         }
 
         boolean isDefaultValue() {

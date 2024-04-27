@@ -19,6 +19,7 @@ import java.util.function.*;
 public final class MonthPicker extends AbstractInteractableComponent<MonthPicker> {
     private final Month defaultValue;
     private final List<Consumer<Month>> onUpdateSubscribers;
+    private final List<Consumer<Boolean>> onRolloverSubscribers;
     private Month selectedValue;
     private boolean isListFocused;
     private Window popup;
@@ -35,6 +36,7 @@ public final class MonthPicker extends AbstractInteractableComponent<MonthPicker
         popup = null;
         typed = "";
         onUpdateSubscribers = new CopyOnWriteArrayList<>();
+        onRolloverSubscribers = new CopyOnWriteArrayList<>();
     }
 
     private static Month successor(Month month) {
@@ -51,6 +53,34 @@ public final class MonthPicker extends AbstractInteractableComponent<MonthPicker
         } catch (NumberFormatException | DateTimeException e) {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Subscribes to when this picker "rolls over" from December to January or vice versa.
+     * The callback will be called with {@code true} when the rollover is going up, or {@code false} otherwise.
+     *
+     * @param consumer A callback to be run when the value rolls over.
+     */
+    public void onRollover(Consumer<Boolean> consumer) {
+        onRolloverSubscribers.add(consumer);
+    }
+
+    /**
+     * Increases this picker's value by one month.
+     */
+    public void increment() {
+        setSelection(successor(getSelectedValue()));
+        if (selectedValue == Month.JANUARY)
+            onRolloverSubscribers.forEach(consumer -> consumer.accept(true));
+    }
+
+    /**
+     * Decreases this picker's value by one month.
+     */
+    public void decrement() {
+        setSelection(predecessor(getSelectedValue()));
+        if (selectedValue == Month.DECEMBER)
+            onRolloverSubscribers.forEach(consumer -> consumer.accept(false));
     }
 
     /**
@@ -161,11 +191,11 @@ public final class MonthPicker extends AbstractInteractableComponent<MonthPicker
                 case Backspace -> {
                 }
                 case ArrowUp -> {
-                    setSelection(successor(getSelectedValue()));
+                    increment();
                     return Result.HANDLED;
                 }
                 case ArrowDown -> {
-                    setSelection(predecessor(getSelectedValue()));
+                    decrement();
                     return Result.HANDLED;
                 }
                 case Escape, Delete -> {

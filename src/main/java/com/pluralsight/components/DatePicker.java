@@ -35,6 +35,18 @@ public final class DatePicker extends Panel {
         addComponent(dayPicker);
         addComponent(yearPicker);
 
+        dayPicker.onRollover(x -> {
+            if (x) monthPicker.increment();
+            else {
+                monthPicker.decrement();
+                dayPicker.setSelection(LocalDate.of(yearPicker.getSelectedValue(), monthPicker.getSelectedValue(), 1).lengthOfMonth());
+            }
+        });
+        monthPicker.onRollover(x -> {
+            if (x) yearPicker.increment();
+            else yearPicker.decrement();
+        });
+
         monthPicker.onUpdate(m -> dayPicker.setMaxValue(LocalDate.of(yearPicker.getSelectedValue(), m, 1).lengthOfMonth()));
 
         yearPicker.onUpdate(y -> dayPicker.setMaxValue(LocalDate.of(y, monthPicker.getSelectedValue(), 1).lengthOfMonth()));

@@ -18,6 +18,7 @@ import java.util.function.*;
 public class IntPicker extends AbstractInteractableComponent<IntPicker> {
     private final int defaultValue;
     private final List<IntConsumer> onUpdateSubscribers;
+    private final List<Consumer<Boolean>> onRolloverSubscribers;
     private int maxValue, minValue, selectedValue, weakMax, maxDigits;
     private boolean isListFocused;
     private String format;
@@ -35,6 +36,7 @@ public class IntPicker extends AbstractInteractableComponent<IntPicker> {
         //noinspection AssignmentToNull
         popup = null;
         onUpdateSubscribers = new CopyOnWriteArrayList<>();
+        onRolloverSubscribers = new CopyOnWriteArrayList<>();
         this.minValue = minValue;
         setMaxValue(maxValue);
     }
@@ -46,6 +48,16 @@ public class IntPicker extends AbstractInteractableComponent<IntPicker> {
      */
     public final void onUpdate(IntConsumer consumer) {
         onUpdateSubscribers.add(consumer);
+    }
+
+    /**
+     * Subscribes to when this picker "rolls over" from the minimum to the maximum or vice versa.
+     * The callback will be called with {@code true} when the rollover is going up, or {@code false} otherwise.
+     *
+     * @param consumer A callback to be run when the value rolls over.
+     */
+    public final void onRollover(Consumer<Boolean> consumer) {
+        onRolloverSubscribers.add(consumer);
     }
 
     /**
@@ -88,19 +100,42 @@ public class IntPicker extends AbstractInteractableComponent<IntPicker> {
         return Math.min(Math.max(selectedValue, minValue), maxValue);
     }
 
+    /**
+     * Increases this picker's value by one.
+     */
+    public void increment() {
+        setSelection(successor(getSelectedValue()));
+        if (selectedValue == minValue)
+            onRolloverSubscribers.forEach(consumer -> consumer.accept(true));
+    }
+
+    /**
+     * Decreases this picker's value by one.
+     */
+    public void decrement() {
+        setSelection(predecessor(getSelectedValue()));
+        if (selectedValue == maxValue)
+            onRolloverSubscribers.forEach(consumer -> consumer.accept(false));
+    }
+
+    /**
+     * Changes the currently selected value.
+     *
+     * @param value The value to use.
+     */
+    public void setSelection(int value) {
+        selectedValue = value;
+        var computed = getSelectedValue();
+        onUpdateSubscribers.forEach(consumer -> consumer.accept(computed));
+        invalidate();
+    }
+
     private int successor(int i) {
         return (i == maxValue) ? minValue : (i + 1);
     }
 
     private int predecessor(int i) {
         return (i == minValue) ? maxValue : (i - 1);
-    }
-
-    private void setSelection(int value) {
-        selectedValue = value;
-        var computed = getSelectedValue();
-        onUpdateSubscribers.forEach(consumer -> consumer.accept(computed));
-        invalidate();
     }
 
     private void defocusList() {
@@ -169,11 +204,11 @@ public class IntPicker extends AbstractInteractableComponent<IntPicker> {
                 case Backspace -> {
                 }
                 case ArrowUp -> {
-                    setSelection(successor(getSelectedValue()));
+                    increment();
                     return Result.HANDLED;
                 }
                 case ArrowDown -> {
-                    setSelection(predecessor(getSelectedValue()));
+                    decrement();
                     return Result.HANDLED;
                 }
                 case Escape, Delete -> {
