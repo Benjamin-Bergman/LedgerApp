@@ -1,6 +1,6 @@
 // Copyright (c) Benjamin Bergman 2024.
 
-package com.pluralsight;
+package com.pluralsight.components;
 
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.Interactable.*;
@@ -12,10 +12,15 @@ import java.util.*;
 /**
  * Represents a list of options accessible via keyboard shortcuts.
  */
-class LabeledMenu extends BasicWindow {
+public class LabeledMenu extends BasicWindow {
     private Collection<LabeledButton> buttons;
 
-    LabeledMenu(String title) {
+    /**
+     * Creates a new {@code LabeledMenu} with the given title.
+     *
+     * @param title The title to use.
+     */
+    public LabeledMenu(String title) {
         super(title);
         buttons = List.of();
         render();
@@ -35,7 +40,7 @@ class LabeledMenu extends BasicWindow {
      *
      * @param newButtons The new buttons to use.
      */
-    final void render(LabeledButton... newButtons) {
+    protected final void render(LabeledButton... newButtons) {
         buttons = Arrays.stream(newButtons).toList();
 
         setCloseWindowWithEscape(true);

@@ -1,6 +1,6 @@
 // Copyright (c) Benjamin Bergman 2024.
 
-package com.pluralsight;
+package com.pluralsight.components;
 
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.*;
@@ -10,7 +10,7 @@ import com.googlecode.lanterna.input.*;
 /**
  * Represents a {@link Button} with a highlighted character to indicate keyboard shortcuts.
  */
-final class LabeledButton extends Button {
+public final class LabeledButton extends Button {
     @SuppressWarnings("FieldAccessedSynchronizedAndUnsynchronized")
     private char highlighted;
 
@@ -18,7 +18,7 @@ final class LabeledButton extends Button {
      * @param label       The text of the button.
      * @param highlighted The character to highlight.
      */
-    LabeledButton(String label, char highlighted) {
+    public LabeledButton(String label, char highlighted) {
         super(label);
         setHighlighted(highlighted);
     }
@@ -28,7 +28,7 @@ final class LabeledButton extends Button {
      * @param highlighted The character to highlight.
      * @param action      Action to fire when the user triggers the button by pressing the enter or the space key.
      */
-    LabeledButton(String label, char highlighted, Runnable action) {
+    public LabeledButton(String label, char highlighted, Runnable action) {
         super(label, action);
         setHighlighted(highlighted);
     }
@@ -36,7 +36,7 @@ final class LabeledButton extends Button {
     /**
      * @return The highlighted character.
      */
-    char getHighlighted() {
+    public char getHighlighted() {
         return highlighted;
     }
 
@@ -45,7 +45,7 @@ final class LabeledButton extends Button {
      *
      * @param highlighted The new character to highlight.
      */
-    void setHighlighted(char highlighted) {
+    public void setHighlighted(char highlighted) {
         this.highlighted = highlighted;
         setRenderer(createDefaultRenderer());
     }

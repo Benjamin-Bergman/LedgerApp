@@ -1,6 +1,6 @@
 // Copyright (c) Benjamin Bergman 2024.
 
-package com.pluralsight;
+package com.pluralsight.components;
 
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.gui2.*;

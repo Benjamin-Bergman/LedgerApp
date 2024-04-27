@@ -26,7 +26,7 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -85,7 +85,7 @@
       <module name="LedgerApp" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.pluralsight.*" />
+          <option name="PATTERN" value="com.pluralsight.components.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

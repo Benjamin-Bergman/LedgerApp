@@ -1,23 +1,37 @@
 // Copyright (c) Benjamin Bergman 2024.
 
-package com.pluralsight;
+package com.pluralsight.components;
 
 import com.googlecode.lanterna.TextColor.*;
 import com.googlecode.lanterna.gui2.*;
 
-final class ErrorTextBox extends TextBox {
+/**
+ * Represents a {@link TextBox} which can be visually marked as invalid.
+ */
+public final class ErrorTextBox extends TextBox {
     private boolean isGood = true;
 
-    ErrorTextBox() {
+    /**
+     * Creates a new {@code ErrorTextBox}. It starts off good.
+     */
+    public ErrorTextBox() {
         isGood = true;
         setRenderer(new ErrorTextBoxRenderer());
     }
 
-    boolean isBad() {
+    /**
+     * @return Whether this text box is marked as invalid.
+     */
+    public boolean isBad() {
         return !isGood;
     }
 
-    void setBad(boolean isBad) {
+    /**
+     * Marks this text box as valid or invalid.
+     *
+     * @param isBad {@code true} to mark this text box as invalid.
+     */
+    public void setBad(boolean isBad) {
         isGood = !isBad;
         invalidate();
     }
