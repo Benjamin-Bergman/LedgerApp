@@ -58,7 +58,7 @@ public final class TimePicker extends Panel {
      */
     public LocalTime timeValue() {
         //noinspection MagicNumber
-        return LocalTime.of((ampmPicker.isAM() ? 0 : 12) + hourPicker.getSelectedValue(), minutePicker.getSelectedValue());
+        return LocalTime.of(((ampmPicker.isAM() ? 0 : 12) + hourPicker.getSelectedValue()) - 1, minutePicker.getSelectedValue());
     }
 
     private static final class AMPMPicker extends AbstractInteractableComponent<AMPMPicker> {

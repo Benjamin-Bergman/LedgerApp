@@ -8,7 +8,7 @@ import com.googlecode.lanterna.gui2.*;
 /**
  * Represents a {@link TextBox} which can be visually marked as invalid.
  */
-public final class ErrorTextBox extends TextBox {
+public class ErrorTextBox extends TextBox {
     private boolean isGood = true;
 
     /**

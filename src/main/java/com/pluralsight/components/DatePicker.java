@@ -65,4 +65,15 @@ public final class DatePicker extends Panel {
     public LocalDate dateValue() {
         return LocalDate.of(yearPicker.getSelectedValue(), monthPicker.getSelectedValue(), dayPicker.getSelectedValue());
     }
+
+    /**
+     * Sets the currently selected date.
+     *
+     * @param date The date to set to.
+     */
+    public void setDate(LocalDate date) {
+        monthPicker.setSelection(date.getMonth());
+        dayPicker.setSelection(date.getDayOfMonth());
+        yearPicker.setSelection(date.getYear());
+    }
 }

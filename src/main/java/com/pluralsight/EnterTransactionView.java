@@ -9,16 +9,13 @@ import com.pluralsight.components.*;
 
 import java.time.*;
 import java.util.*;
-import java.util.regex.*;
 
 /**
  * Represents the view for entering a row into a financial ledger.
  */
 final class EnterTransactionView extends BasicWindow {
-    private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)[0-9]*(?:\\.[0-9]{0,2})?$");
-    private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.?0*$");
-
-    private final ErrorTextBox amountInput, itemInput, vendorInput;
+    private final MoneyPicker amountInput;
+    private final ErrorTextBox itemInput, vendorInput;
     private final DatePicker dateInput;
     private final TimePicker timeInput;
 
@@ -29,8 +26,7 @@ final class EnterTransactionView extends BasicWindow {
 
         Panel panel = new Panel(new GridLayout(2));
         new Label("Amount").addTo(panel);
-        amountInput = new ErrorTextBox();
-        amountInput.setBad(true);
+        amountInput = new MoneyPicker();
         panel.addComponent(amountInput);
         new Label("Item").addTo(panel);
         itemInput = new ErrorTextBox();
@@ -48,12 +44,6 @@ final class EnterTransactionView extends BasicWindow {
         new Label("Time").addTo(panel);
         timeInput = new TimePicker();
         panel.addComponent(timeInput);
-
-        amountInput.setTextChangeListener((text, user) -> {
-            var money = MONEY_PATTERN.matcher(text);
-            var zero = ZERO_PATTERN.matcher(text);
-            amountInput.setBad(!money.matches() || zero.matches());
-        });
 
         itemInput.setTextChangeListener((text, user) -> {
             itemInput.setBad(text.isEmpty());
@@ -122,13 +112,12 @@ final class EnterTransactionView extends BasicWindow {
                      .addButton(MessageDialogButton.Cancel)
                      .build()
                      .showDialog(getTextGUI()) == MessageDialogButton.Yes) {
+            //noinspection OptionalGetWithoutIsPresent
             db.addTransaction(new Transaction(
                 LocalDateTime.of(dateInput.dateValue(), timeInput.timeValue()),
                 itemInput.getText(),
                 vendorInput.getText(),
-                (credit ? 1 : -1) * Double.parseDouble(
-                    amountInput.getText().replace('$', ' ')
-                ))
+                (credit ? 1 : -1) * amountInput.moneyValue().getAsDouble())
             );
             close();
         }

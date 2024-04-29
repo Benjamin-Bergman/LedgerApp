@@ -112,7 +112,12 @@ public final class MonthPicker extends AbstractInteractableComponent<MonthPicker
             .orElseGet(() -> tryParse(typed).orElseGet(() -> selectedValue));
     }
 
-    private void setSelection(Month value) {
+    /**
+     * Sets the currently selected month.
+     *
+     * @param value The month to set.
+     */
+    public void setSelection(Month value) {
         selectedValue = value;
         typed = "";
         onUpdateSubscribers.forEach(consumer -> consumer.accept(selectedValue));
