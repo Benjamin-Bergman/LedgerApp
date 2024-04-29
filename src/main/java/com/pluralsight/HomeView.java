@@ -36,5 +36,6 @@ final class HomeView extends LabeledMenu {
     }
 
     private void showLedger() {
+        getTextGUI().addWindowAndWait(new TransactionListView(database));
     }
 }

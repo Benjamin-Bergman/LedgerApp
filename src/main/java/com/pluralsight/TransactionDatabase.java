@@ -4,12 +4,13 @@ package com.pluralsight;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 /**
  * Represents a database of {@link Transaction}s backed by a file.
  */
-final class TransactionDatabase implements Closeable {
+final class TransactionDatabase implements Closeable, Iterable<Transaction> {
     private final File filePath;
     private List<Transaction> transactions;
 
@@ -37,6 +38,21 @@ final class TransactionDatabase implements Closeable {
     @Override
     public void close() throws IOException {
         writeToDisk();
+    }
+
+    @Override
+    public Iterator<Transaction> iterator() {
+        return transactions.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Transaction> action) {
+        transactions.forEach(action);
+    }
+
+    @Override
+    public Spliterator<Transaction> spliterator() {
+        return transactions.spliterator();
     }
 
     /**
