@@ -6,6 +6,7 @@ import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.Interactable.*;
 import com.googlecode.lanterna.gui2.LinearLayout.*;
 import com.googlecode.lanterna.input.*;
+import com.pluralsight.ReportView.*;
 import com.pluralsight.components.*;
 
 import java.util.*;
@@ -69,14 +70,7 @@ final class TransactionListView extends BasicWindow {
     }
 
     private void showReport(ReportType type) {
-
-    }
-
-    private enum ReportType {
-        MONTH_TO_DATE,
-        PRIOR_MONTH,
-        YEAR_TO_DATE,
-        PRIOR_YEAR
+        getTextGUI().addWindowAndWait(new ReportView(type, database));
     }
 
     private static final class TransactionList extends AbstractListBox<Transaction, TransactionList> {
