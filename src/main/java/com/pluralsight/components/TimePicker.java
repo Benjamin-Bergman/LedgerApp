@@ -32,7 +32,7 @@ public final class TimePicker extends Panel {
     public TimePicker(LocalTime defaultTime) {
         super(new LinearLayout(Direction.HORIZONTAL));
 
-        hourPicker = new IntPicker(defaultTime.getHour(), 1, 12);
+        hourPicker = new IntPicker((defaultTime.getHour() > 12) ? (defaultTime.getHour() - 12) : defaultTime.getHour(), 1, 12);
         minutePicker = new IntPicker(defaultTime.getMinute(), 0, 59);
         ampmPicker = new AMPMPicker(defaultTime.get(ChronoField.AMPM_OF_DAY) == 0);
         hourPicker.onRollover(x -> ampmPicker.setIsAM(!ampmPicker.isAM()));
