@@ -40,7 +40,7 @@ The app runs in a TUI (Terminal User Interface) that should be intuitive to use.
 
 # Demo
 
-[![Demo](https://asciinema.org/a/rGIYM7Xyx08iWrlqX441u4thv.svg)](https://asciinema.org/a/rGIYM7Xyx08iWrlqX441u4thv?startAt=15&autoplay=1)
+[![Demo](https://asciinema.org/a/rGIYM7Xyx08iWrlqX441u4thv.svg)](https://asciinema.org/a/rGIYM7Xyx08iWrlqX441u4thv?startAt=10&autoplay=1)
 
 ## Possible Future Enhancements
 
