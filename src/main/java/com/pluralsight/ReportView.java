@@ -17,8 +17,14 @@ import java.util.stream.*;
  * Represents a view of an aggregated financial report.
  */
 final class ReportView extends DialogWindow {
+    private final Consumer<? super FilterOptions> onShow;
+    private final ReportType reportType;
+
     ReportView(ReportType reportType, Iterable<Transaction> db, Consumer<? super FilterOptions> onShow) {
         super(reportType.getReportName());
+
+        this.onShow = onShow;
+        this.reportType = reportType;
 
         var result = StreamSupport
             .stream(db.spliterator(), true)
@@ -47,11 +53,15 @@ final class ReportView extends DialogWindow {
 
     @Override
     public boolean handleInput(KeyStroke key) {
-        if ((key.getKeyType() == KeyType.Character)
-            && ((key.getCharacter() == 'x') || (key.getCharacter() == 'X'))) {
-            close();
-            return false;
-        }
+        if (key.getKeyType() == KeyType.Character)
+            if ((key.getCharacter() == 'x') || (key.getCharacter() == 'X')) {
+                close();
+                return false;
+            } else if ((key.getCharacter() == 's') || (key.getCharacter() == 'S')) {
+                onShow.accept(reportType.getFilter());
+                close();
+                return false;
+            }
 
         return super.handleInput(key);
     }

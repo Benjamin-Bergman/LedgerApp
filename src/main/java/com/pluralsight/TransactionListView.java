@@ -20,6 +20,7 @@ final class TransactionListView extends BasicWindow {
     private final TransactionDatabase database;
     private final LabeledButton[] buttons;
     private final TransactionList transactions;
+    private final Label liveReports;
     private FilterOptions filter;
 
     TransactionListView(TransactionDatabase database) {
@@ -32,8 +33,13 @@ final class TransactionListView extends BasicWindow {
         var layout = new Panel(new LinearLayout(Direction.HORIZONTAL));
         setComponent(layout);
 
+        var dataColumn = new Panel(new LinearLayout(Direction.VERTICAL));
+        layout.addComponent(dataColumn);
+
         transactions = new TransactionList();
-        layout.addComponent(transactions);
+        dataColumn.addComponent(transactions);
+        liveReports = new Label("");
+        dataColumn.addComponent(liveReports);
         generateList();
 
         var controls = new Panel(new LinearLayout(Direction.VERTICAL));
@@ -79,17 +85,30 @@ final class TransactionListView extends BasicWindow {
 
     private void showReport(ReportType type) {
         getTextGUI().addWindowAndWait(new ReportView(type, database, op -> {
-            filter = op.override(filter);
+            filter = op;
             generateList();
         }));
     }
 
+    @SuppressWarnings("ReassignedVariable")
     private void generateList() {
         transactions.clearItems();
 
-        for (var t : database)
-            if (filter.test(t))
+        int total = 0;
+        int visible = 0;
+        double totalAmount = 0;
+
+        for (var t : database) {
+            total++;
+            if (filter.test(t)) {
+                visible++;
+                totalAmount += t.amount();
                 transactions.addItem(t);
+            }
+        }
+
+        //noinspection HardcodedFileSeparator
+        liveReports.setText("Showing %d/%d transactions totalling $%.2f".formatted(visible, total, totalAmount));
     }
 
     /**
