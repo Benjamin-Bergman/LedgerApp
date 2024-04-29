@@ -27,7 +27,7 @@ final class TransactionListView extends BasicWindow {
     TransactionListView(TransactionDatabase database) {
         super("Transactions");
 
-        filter = new FilterOptions(null, null, null, null, null, null);
+        filter = new FilterOptions(null, null, null, null, null, null, null);
 
         this.database = database;
 
@@ -74,9 +74,10 @@ final class TransactionListView extends BasicWindow {
             tryClose();
             return false;
         }
-        for (LabeledButton button : buttons)
-            if (button.handleKeyStroke(key) == Result.HANDLED)
-                return false;
+        if (!(getFocusedInteractable() instanceof TextBox) && !(getFocusedInteractable() instanceof MonthPicker))
+            for (LabeledButton button : buttons)
+                if (button.handleKeyStroke(key) == Result.HANDLED)
+                    return false;
 
         return super.handleInput(key);
     }
@@ -125,10 +126,11 @@ final class TransactionListView extends BasicWindow {
      * @param vendor      The transaction's vendor must contain this text.
      * @param minAmount   The transaction must be for at least this much money.
      * @param maxAmount   The transaction must be for at most this much money.
+     * @param onlyCredits If {@code true}, only credits are shown. If {@code false}, only debits are shown.
      */
     @SuppressWarnings({"PackageVisibleInnerClass", "ParameterHidesMemberVariable"})
     record FilterOptions(LocalDate after, LocalDate before, String description, String vendor, Double minAmount,
-                         Double maxAmount) implements Predicate<Transaction> {
+                         Double maxAmount, Boolean onlyCredits) implements Predicate<Transaction> {
         @SuppressWarnings({"OverlyComplexMethod", "FeatureEnvy"})
         @Override
         public boolean test(Transaction t) {
@@ -138,41 +140,36 @@ final class TransactionListView extends BasicWindow {
                 && ((description == null) || t.description().toLowerCase().contains(description.toLowerCase()))
                 && ((vendor == null) || t.vendor().toLowerCase().contains(vendor.toLowerCase()))
                 && ((minAmount == null) || (Math.abs(t.amount()) >= minAmount))
-                && ((maxAmount == null) || (Math.abs(t.amount()) <= maxAmount));
-        }
-
-        FilterOptions override(FilterOptions other) {
-            return new FilterOptions(
-                Optional.ofNullable(after).orElseGet(other::after),
-                Optional.ofNullable(before).orElseGet(other::before),
-                Optional.ofNullable(description).orElseGet(other::description),
-                Optional.ofNullable(vendor).orElseGet(other::vendor),
-                Optional.ofNullable(minAmount).orElseGet(other::minAmount),
-                Optional.ofNullable(maxAmount).orElseGet(other::maxAmount));
+                && ((maxAmount == null) || (Math.abs(t.amount()) <= maxAmount))
+                && ((onlyCredits == null) || (onlyCredits ? (t.amount() > 0) : (t.amount() < 1)));
         }
 
         FilterOptions withAfter(LocalDate after) {
-            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount);
+            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount, onlyCredits);
         }
 
         FilterOptions withBefore(LocalDate before) {
-            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount);
+            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount, onlyCredits);
         }
 
         FilterOptions withDescription(String description) {
-            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount);
+            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount, onlyCredits);
         }
 
         FilterOptions withVendor(String vendor) {
-            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount);
+            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount, onlyCredits);
         }
 
         FilterOptions withMin(Double minAmount) {
-            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount);
+            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount, onlyCredits);
         }
 
         FilterOptions withMax(Double maxAmount) {
-            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount);
+            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount, onlyCredits);
+        }
+
+        FilterOptions withOnlyCredits(Boolean onlyCredits) {
+            return new FilterOptions(after, before, description, vendor, minAmount, maxAmount, onlyCredits);
         }
     }
 
@@ -197,8 +194,9 @@ final class TransactionListView extends BasicWindow {
         private final CheckBox beforeEnabled, afterEnabled;
         private final TextBox description, vendor;
         private final MoneyPicker minValue, maxValue;
+        private final ComboBox<CreditsMode> onlyCredits;
 
-        @SuppressWarnings("NestedAssignment")
+        @SuppressWarnings({"NestedAssignment", "OverlyLongMethod"})
         SettingsPanel() {
             super(new GridLayout(2));
 
@@ -228,6 +226,13 @@ final class TransactionListView extends BasicWindow {
             addComponent(new Label("Max $"));
             addComponent(maxValue = new MoneyPicker(), justify);
 
+            addComponent(new Label("Type"));
+            addComponent(onlyCredits = new ComboBox<>(), justify);
+            onlyCredits.addItem(CreditsMode.All);
+            onlyCredits.addItem(CreditsMode.Credits);
+            onlyCredits.addItem(CreditsMode.Debits);
+            onlyCredits.setSelectedIndex(0);
+
             beforeEnabled.addListener(enabled -> {
                 filter = filter.withBefore(enabled ? before.dateValue() : null);
                 generateList();
@@ -255,6 +260,10 @@ final class TransactionListView extends BasicWindow {
                     () -> filter = filter.withMax(null));
                 generateList();
             });
+            onlyCredits.addListener((ix, prev, auto) -> {
+                filter = filter.withOnlyCredits((ix == 0) ? null : (ix == 1));
+                generateList();
+            });
 
             redraw();
         }
@@ -279,6 +288,15 @@ final class TransactionListView extends BasicWindow {
 
             minValue.setText((filter.minAmount() == null) ? "" : "$%.2f".formatted(filter.minAmount()));
             maxValue.setText((filter.maxAmount() == null) ? "" : "$%.2f".formatted(filter.maxAmount()));
+
+            onlyCredits.setSelectedIndex((filter.onlyCredits() == null) ? 0 : (filter.onlyCredits() ? 1 : 2));
+        }
+
+        @SuppressWarnings({"InnerClassTooDeeplyNested", "FieldNamingConvention"})
+        private enum CreditsMode {
+            All,
+            Credits,
+            Debits
         }
     }
 }

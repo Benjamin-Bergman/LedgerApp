@@ -71,10 +71,10 @@ final class ReportView extends DialogWindow {
      */
     @SuppressWarnings("PackageVisibleInnerClass")
     enum ReportType implements Predicate<Transaction> {
-        MONTH_TO_DATE("Month To Date", new FilterOptions(LocalDate.now().withDayOfMonth(1), null, null, null, null, null)),
-        PRIOR_MONTH("Prior Month", new FilterOptions(LocalDate.now().minusMonths(1).withDayOfMonth(1), LocalDate.now().withDayOfMonth(1), null, null, null, null)),
-        YEAR_TO_DATE("Year To Date", new FilterOptions(LocalDate.now().withMonth(1).withDayOfMonth(1), null, null, null, null, null)),
-        PRIOR_YEAR("Prior Year", new FilterOptions(LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1), LocalDate.now().withMonth(1).withDayOfMonth(1), null, null, null, null));
+        MONTH_TO_DATE("Month To Date", new FilterOptions(LocalDate.now().withDayOfMonth(1), null, null, null, null, null, null)),
+        PRIOR_MONTH("Prior Month", new FilterOptions(LocalDate.now().minusMonths(1).withDayOfMonth(1), LocalDate.now().withDayOfMonth(1), null, null, null, null, null)),
+        YEAR_TO_DATE("Year To Date", new FilterOptions(LocalDate.now().withMonth(1).withDayOfMonth(1), null, null, null, null, null, null)),
+        PRIOR_YEAR("Prior Year", new FilterOptions(LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1), LocalDate.now().withMonth(1).withDayOfMonth(1), null, null, null, null, null));
 
         private final String reportName;
         private final FilterOptions filter;
