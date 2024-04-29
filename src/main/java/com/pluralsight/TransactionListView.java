@@ -8,6 +8,7 @@ import com.googlecode.lanterna.graphics.*;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.Interactable.*;
 import com.googlecode.lanterna.gui2.LinearLayout.*;
+import com.googlecode.lanterna.gui2.dialogs.*;
 import com.googlecode.lanterna.input.*;
 import com.pluralsight.ReportView.*;
 import com.pluralsight.components.*;
@@ -176,10 +177,29 @@ final class TransactionListView extends BasicWindow {
         }
     }
 
-    private static final class TransactionList extends AbstractListBox<Transaction, TransactionList> {
+    private final class TransactionList extends AbstractListBox<Transaction, TransactionList> {
         @Override
         protected ListItemRenderer<Transaction, TransactionList> createDefaultListItemRenderer() {
             return new TransactionRenderer();
+        }
+
+        @Override
+        public synchronized Result handleKeyStroke(KeyStroke keyStroke) {
+            if (isActivationStroke(keyStroke)) {
+                if (new MessageDialogBuilder()
+                        .setTitle("Confirm Delete")
+                        .setText("Are you sure you want to delete this transaction?")
+                        .addButton(MessageDialogButton.Cancel)
+                        .addButton(MessageDialogButton.Yes)
+                        .build()
+                        .showDialog((WindowBasedTextGUI) getTextGUI()) == MessageDialogButton.Yes) {
+                    database.removeTransaction(getSelectedItem());
+                    generateList();
+                }
+                return Result.HANDLED;
+            }
+
+            return super.handleKeyStroke(keyStroke);
         }
 
         @SuppressWarnings("InnerClassTooDeeplyNested")

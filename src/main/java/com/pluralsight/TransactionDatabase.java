@@ -56,6 +56,22 @@ final class TransactionDatabase implements Closeable, Iterable<Transaction> {
     }
 
     /**
+     * Removes a transaction from the database.
+     *
+     * @param selectedItem The transaction to remove.
+     * @return {@code true} if the removal was successful.
+     */
+    public boolean removeTransaction(Transaction selectedItem) {
+        var res = transactions.remove(selectedItem);
+        if (res) try {
+            writeToDisk();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return res;
+    }
+
+    /**
      * Updates the in-memory representation of this database to match the file representation.
      *
      * @throws IOException When reading from the file fails.
