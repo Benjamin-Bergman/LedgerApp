@@ -14,7 +14,7 @@ import java.util.*;
  * @param vendor      Who this transaction was with.
  * @param amount      How much money this transaction exchanged.
  */
-record Transaction(LocalDateTime dateTime, String description, String vendor, Double amount) {
+record Transaction(LocalDateTime dateTime, String description, String vendor, double amount) {
     /**
      * Deserializes a transaction from a row of CSV.
      *

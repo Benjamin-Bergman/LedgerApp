@@ -85,7 +85,7 @@
       <recent name="com.pluralsight" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Program">
+  <component name="RunManager" selected="JUnit.All in LedgerApp">
     <configuration name="Program" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.pluralsight.Program" />
       <module name="LedgerApp" />
@@ -109,8 +109,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Program" />
         <item itemvalue="JUnit.All in LedgerApp" />
+        <item itemvalue="Application.Program" />
       </list>
     </recent_temporary>
   </component>
@@ -132,7 +132,7 @@
       <updated>1712861896002</updated>
       <workItem from="1714138812092" duration="13490000" />
       <workItem from="1714228903536" duration="3703000" />
-      <workItem from="1714394104230" duration="6985000" />
+      <workItem from="1714394104230" duration="7732000" />
     </task>
     <servers />
   </component>
