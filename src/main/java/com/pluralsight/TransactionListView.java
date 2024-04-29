@@ -13,6 +13,9 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+/**
+ * Represents a view of a list of transactions.
+ */
 final class TransactionListView extends BasicWindow {
     private final TransactionDatabase database;
     private final LabeledButton[] buttons;
@@ -89,8 +92,22 @@ final class TransactionListView extends BasicWindow {
                 transactions.addItem(t);
     }
 
+    /**
+     * Represents filtering options for a list of transaction.
+     * Any filter can be {@code null} to not use it.
+     * Note that date filtering is half-open, while amount filtering is closed.
+     *
+     * @param after       The transaction must have occurred on or after this date.
+     * @param before      The transaction must have occurred strictly before this date.
+     * @param description The transaction's description must contain this text.
+     * @param vendor      The transaction's vendor must contain this text.
+     * @param minAmount   The transaction must be for at least this much money.
+     * @param maxAmount   The transaction must be for at most this much money.
+     */
+    @SuppressWarnings("PackageVisibleInnerClass")
     record FilterOptions(LocalDate after, LocalDate before, String description, String vendor, Double minAmount,
                          Double maxAmount) implements Predicate<Transaction> {
+        @SuppressWarnings({"OverlyComplexMethod", "FeatureEnvy"})
         @Override
         public boolean test(Transaction t) {
             return

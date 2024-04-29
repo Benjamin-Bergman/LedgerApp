@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+/**
+ * Represents a view of an aggregated financial report.
+ */
 final class ReportView extends DialogWindow {
     ReportView(ReportType reportType, Iterable<Transaction> db, Consumer<? super FilterOptions> onShow) {
         super(reportType.getReportName());
@@ -56,6 +59,7 @@ final class ReportView extends DialogWindow {
     /**
      * The type of some report
      */
+    @SuppressWarnings("PackageVisibleInnerClass")
     enum ReportType implements Predicate<Transaction> {
         MONTH_TO_DATE("Month To Date", new FilterOptions(LocalDate.now().withDayOfMonth(1), null, null, null, null, null)),
         PRIOR_MONTH("Prior Month", new FilterOptions(LocalDate.now().minusMonths(1).withDayOfMonth(1), LocalDate.now().withDayOfMonth(1), null, null, null, null)),
@@ -84,6 +88,7 @@ final class ReportView extends DialogWindow {
         }
     }
 
+    @SuppressWarnings("NewClassNamingConvention")
     private record Tuple(int count, double total) {
     }
 }
