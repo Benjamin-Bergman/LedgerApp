@@ -25,7 +25,7 @@ Here are a few workarounds:
 - Run via Git Bash
 - Run via WSL
 
-The first four options will cause Lnatrena to create a terminal emulator window.
+The first four options will cause Lanterna to create a terminal emulator window.
 
 ## Usage
 
