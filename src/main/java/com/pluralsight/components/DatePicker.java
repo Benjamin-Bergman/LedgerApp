@@ -5,6 +5,7 @@ package com.pluralsight.components;
 import com.googlecode.lanterna.gui2.*;
 
 import java.time.*;
+import java.util.function.*;
 
 /**
  * Represents a date picker.
@@ -13,6 +14,7 @@ import java.time.*;
 public final class DatePicker extends Panel {
     private final IntPicker dayPicker, yearPicker;
     private final MonthPicker monthPicker;
+    private Consumer<LocalDate> listener;
 
     /**
      * Creates a new instance whose default value is {@code LocalDate.now()}.
@@ -28,6 +30,9 @@ public final class DatePicker extends Panel {
      */
     public DatePicker(LocalDate defaultDate) {
         super(new LinearLayout(Direction.HORIZONTAL));
+
+        listener = null;
+
         monthPicker = new MonthPicker(defaultDate.getMonth());
         dayPicker = new IntPicker(defaultDate.getDayOfMonth(), 1, defaultDate.lengthOfMonth());
         yearPicker = new IntPicker(defaultDate.getYear(), 0, 9_999);
@@ -50,6 +55,10 @@ public final class DatePicker extends Panel {
         monthPicker.onUpdate(m -> dayPicker.setMaxValue(LocalDate.of(yearPicker.getSelectedValue(), m, 1).lengthOfMonth()));
 
         yearPicker.onUpdate(y -> dayPicker.setMaxValue(LocalDate.of(y, monthPicker.getSelectedValue(), 1).lengthOfMonth()));
+
+        dayPicker.onUpdate(x -> update());
+        monthPicker.onUpdate(x -> update());
+        yearPicker.onUpdate(x -> update());
     }
 
     /**
@@ -75,5 +84,18 @@ public final class DatePicker extends Panel {
         monthPicker.setSelection(date.getMonth());
         dayPicker.setSelection(date.getDayOfMonth());
         yearPicker.setSelection(date.getYear());
+    }
+
+    /**
+     * Set a listener for when the selected date changes.
+     *
+     * @param listener The listener to set.
+     */
+    public void setChangeListener(Consumer<LocalDate> listener) {
+        this.listener = listener;
+    }
+
+    private void update() {
+        if (listener != null) listener.accept(dateValue());
     }
 }

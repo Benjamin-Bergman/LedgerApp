@@ -241,7 +241,18 @@ final class TransactionListView extends BasicWindow {
                 filter = filter.withAfter(enabled ? after.dateValue() : null);
                 generateList();
             });
-            // before, after
+            before.setChangeListener(date -> {
+                if (beforeEnabled.isChecked()) {
+                    filter = filter.withBefore(before.dateValue());
+                    generateList();
+                }
+            });
+            after.setChangeListener(date -> {
+                if (afterEnabled.isChecked()) {
+                    filter = filter.withAfter(after.dateValue());
+                    generateList();
+                }
+            });
             description.setTextChangeListener((text, auto) -> {
                 filter = filter.withDescription(text.isEmpty() ? "" : text);
                 generateList();
