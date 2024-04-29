@@ -61,7 +61,7 @@ final class TransactionDatabase implements Closeable {
      *
      * @throws IOException When writing to the file fails.
      */
-    void writeToDisk() throws IOException {
+    private void writeToDisk() throws IOException {
         assertGoodFile();
         try (var fw = new FileWriter(filePath);
              var bw = new BufferedWriter(fw)) {
@@ -75,6 +75,11 @@ final class TransactionDatabase implements Closeable {
 
     void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+        try {
+            writeToDisk();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void assertGoodFile() {
