@@ -18,8 +18,7 @@ final class EnterTransactionView extends BasicWindow {
     private static final Pattern MONEY_PATTERN = Pattern.compile("^\\$?(?!\\.$)[0-9]*(?:\\.[0-9]{0,2})?$");
     private static final Pattern ZERO_PATTERN = Pattern.compile("^\\$?0*\\.?0*$");
 
-    private final ErrorTextBox amountInput;
-    private final TextBox itemInput, vendorInput;
+    private final ErrorTextBox amountInput, itemInput, vendorInput;
     private final DatePicker dateInput;
     private final TimePicker timeInput;
 
@@ -34,9 +33,13 @@ final class EnterTransactionView extends BasicWindow {
         amountInput.setBad(true);
         panel.addComponent(amountInput);
         new Label("Item").addTo(panel);
-        itemInput = new TextBox().addTo(panel);
+        itemInput = new ErrorTextBox();
+        itemInput.addTo(panel);
+        itemInput.setBad(true);
         new Label("Vendor").addTo(panel);
-        vendorInput = new TextBox().addTo(panel);
+        vendorInput = new ErrorTextBox();
+        vendorInput.addTo(panel);
+        vendorInput.setBad(true);
 
         new Label("Date").addTo(panel);
         dateInput = new DatePicker();
@@ -50,6 +53,13 @@ final class EnterTransactionView extends BasicWindow {
             var money = MONEY_PATTERN.matcher(text);
             var zero = ZERO_PATTERN.matcher(text);
             amountInput.setBad(!money.matches() || zero.matches());
+        });
+
+        itemInput.setTextChangeListener((text, user) -> {
+            itemInput.setBad(text.isEmpty());
+        });
+        vendorInput.setTextChangeListener((text, user) -> {
+            vendorInput.setBad(text.isEmpty());
         });
 
         panel.addComponent(new Button("Exit", this::tryClose));
@@ -87,9 +97,21 @@ final class EnterTransactionView extends BasicWindow {
     }
 
     private void trySubmit(boolean credit, TransactionDatabase db) {
-        if (amountInput.isBad()) new MessageDialogBuilder()
+        var amtBad = amountInput.isBad();
+        var dscBad = itemInput.isBad();
+        var vndBad = vendorInput.isBad();
+
+        StringBuilder errors = new StringBuilder();
+        if (amtBad)
+            errors.append("Invalid money amount").append(System.lineSeparator());
+        if (dscBad)
+            errors.append("Invalid item").append(System.lineSeparator());
+        if (vndBad)
+            errors.append("Invalid vendor").append(System.lineSeparator());
+
+        if (!errors.isEmpty()) new MessageDialogBuilder()
             .setTitle("Error")
-            .setText("Invalid money amount!")
+            .setText(errors.toString().trim())
             .addButton(MessageDialogButton.OK)
             .build()
             .showDialog(getTextGUI());
