@@ -39,11 +39,11 @@ final class ReportView extends DialogWindow {
 
         var buttons = new Panel(new LinearLayout(Direction.HORIZONTAL));
         display.addComponent(buttons);
-        buttons.addComponent(new LabeledButton("Exit", 'x', this::close));
         buttons.addComponent(new LabeledButton("Show", 'S', () -> {
             onShow.accept(reportType.getFilter());
             close();
         }));
+        buttons.addComponent(new LabeledButton("Exit", 'x', this::close));
 
         setComponent(display);
 
