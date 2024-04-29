@@ -2,6 +2,9 @@
 
 package com.pluralsight;
 
+import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.TextColor.*;
+import com.googlecode.lanterna.graphics.*;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.Interactable.*;
 import com.googlecode.lanterna.gui2.LinearLayout.*;
@@ -184,6 +187,28 @@ final class TransactionListView extends BasicWindow {
             @Override
             public String getLabel(TransactionList listBox, int index, Transaction item) {
                 return super.getLabel(listBox, index, item);
+            }
+
+            @SuppressWarnings("ReassignedVariable")
+            @Override
+            public void drawItem(TextGUIGraphics graphics, TransactionList listBox, int index, Transaction item, boolean selected, boolean focused) {
+                ThemeDefinition themeDefinition = listBox.getTheme().getDefinition(AbstractListBox.class);
+                if (selected && focused) {
+                    graphics.applyThemeStyle(themeDefinition.getSelected());
+                    graphics.setForegroundColor((item.amount() < 0) ? ANSI.RED_BRIGHT : ANSI.WHITE);
+                } else {
+                    graphics.applyThemeStyle(themeDefinition.getNormal());
+                    graphics.setForegroundColor((item.amount() < 0) ? ANSI.RED : ANSI.BLACK);
+                }
+
+                //noinspection NonConstantStringShouldBeStringBuffer
+                String label = getLabel(listBox, index, item);
+
+                label = TerminalTextUtils.fitString(label, graphics.getSize().getColumns());
+                while (TerminalTextUtils.getColumnWidth(label) < graphics.getSize().getColumns())
+                    label += ' ';
+
+                graphics.putString(0, 0, label);
             }
         }
     }
