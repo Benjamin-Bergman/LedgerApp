@@ -60,7 +60,7 @@ final class TransactionDatabase implements Closeable, Iterable<Transaction> {
      *
      * @throws IOException When reading from the file fails.
      */
-    void readFromDisk() throws IOException {
+    private void readFromDisk() throws IOException {
         assertGoodFile();
         try (var fr = new FileReader(filePath);
              var br = new BufferedReader(fr)) {
