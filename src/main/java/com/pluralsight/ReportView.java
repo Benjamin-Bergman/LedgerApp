@@ -5,6 +5,7 @@ package com.pluralsight;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.dialogs.*;
 import com.googlecode.lanterna.input.*;
+import com.pluralsight.TransactionListView.*;
 import com.pluralsight.components.*;
 
 import java.time.*;
@@ -13,7 +14,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 final class ReportView extends DialogWindow {
-    ReportView(ReportType reportType, Iterable<Transaction> db) {
+    ReportView(ReportType reportType, Iterable<Transaction> db, Consumer<? super FilterOptions> onShow) {
         super(reportType.getReportName());
 
         var result = StreamSupport
@@ -26,7 +27,14 @@ final class ReportView extends DialogWindow {
 
         var display = new Panel();
         display.addComponent(new Label("%d transactions totalling $%.2f".formatted(result.count(), result.total())));
-        display.addComponent(new LabeledButton("Exit", 'x', this::close));
+
+        var buttons = new Panel(new LinearLayout(Direction.HORIZONTAL));
+        display.addComponent(buttons);
+        buttons.addComponent(new LabeledButton("Exit", 'x', this::close));
+        buttons.addComponent(new LabeledButton("Show", 'S', () -> {
+            onShow.accept(reportType.getFilter());
+            close();
+        }));
 
         setComponent(display);
 
@@ -49,17 +57,15 @@ final class ReportView extends DialogWindow {
      * The type of some report
      */
     enum ReportType implements Predicate<Transaction> {
-        MONTH_TO_DATE("Month To Date", t -> t.date().isAfter(LocalDate.now().withDayOfMonth(1).minusDays(1))),
-        PRIOR_MONTH("Prior Month", t ->
-            t.date().isAfter(LocalDate.now().minusMonths(1).withDayOfMonth(1).minusDays(1))
-            && t.date().isBefore(LocalDate.now().withDayOfMonth(1))),
-        YEAR_TO_DATE("Year To Date", t -> t.date().getYear() == LocalDate.now().getYear()),
-        PRIOR_YEAR("Prior Year", t -> t.date().getYear() == (LocalDate.now().getYear() - 1));
+        MONTH_TO_DATE("Month To Date", new FilterOptions(LocalDate.now().withDayOfMonth(1), null, null, null, null, null)),
+        PRIOR_MONTH("Prior Month", new FilterOptions(LocalDate.now().minusMonths(1).withDayOfMonth(1), LocalDate.now().withDayOfMonth(1), null, null, null, null)),
+        YEAR_TO_DATE("Year To Date", new FilterOptions(LocalDate.now().withMonth(1).withDayOfMonth(1), null, null, null, null, null)),
+        PRIOR_YEAR("Prior Year", new FilterOptions(LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1), LocalDate.now().withMonth(1).withDayOfMonth(1), null, null, null, null));
 
         private final String reportName;
-        private final Predicate<? super Transaction> filter;
+        private final FilterOptions filter;
 
-        ReportType(String reportName, Predicate<? super Transaction> filter) {
+        ReportType(String reportName, FilterOptions filter) {
             this.reportName = reportName;
             this.filter = filter;
         }
@@ -69,8 +75,12 @@ final class ReportView extends DialogWindow {
             return filter.test(transaction);
         }
 
-        public String getReportName() {
+        String getReportName() {
             return reportName;
+        }
+
+        FilterOptions getFilter() {
+            return filter;
         }
     }
 

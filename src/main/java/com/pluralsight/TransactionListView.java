@@ -9,24 +9,29 @@ import com.googlecode.lanterna.input.*;
 import com.pluralsight.ReportView.*;
 import com.pluralsight.components.*;
 
+import java.time.*;
 import java.util.*;
+import java.util.function.*;
 
 final class TransactionListView extends BasicWindow {
     private final TransactionDatabase database;
     private final LabeledButton[] buttons;
+    private final TransactionList transactions;
+    private FilterOptions filter;
 
     TransactionListView(TransactionDatabase database) {
         super("Transactions");
+
+        filter = new FilterOptions(null, null, null, null, null, null);
 
         this.database = database;
 
         var layout = new Panel(new LinearLayout(Direction.HORIZONTAL));
         setComponent(layout);
 
-        var list = new TransactionList();
-        layout.addComponent(list);
-        for (var t : database)
-            list.addItem(t);
+        transactions = new TransactionList();
+        layout.addComponent(transactions);
+        generateList();
 
         var controls = new Panel(new LinearLayout(Direction.VERTICAL));
         layout.addComponent(controls);
@@ -70,7 +75,42 @@ final class TransactionListView extends BasicWindow {
     }
 
     private void showReport(ReportType type) {
-        getTextGUI().addWindowAndWait(new ReportView(type, database));
+        getTextGUI().addWindowAndWait(new ReportView(type, database, op -> {
+            filter = op.override(filter);
+            generateList();
+        }));
+    }
+
+    private void generateList() {
+        transactions.clearItems();
+
+        for (var t : database)
+            if (filter.test(t))
+                transactions.addItem(t);
+    }
+
+    record FilterOptions(LocalDate after, LocalDate before, String description, String vendor, Double minAmount,
+                         Double maxAmount) implements Predicate<Transaction> {
+        @Override
+        public boolean test(Transaction t) {
+            return
+                ((after == null) || !t.date().isBefore(after))
+                && ((before == null) || t.date().isBefore(before))
+                && ((description == null) || t.description().toLowerCase().contains(description.toLowerCase()))
+                && ((vendor == null) || t.vendor().toLowerCase().contains(vendor.toLowerCase()))
+                && ((minAmount == null) || (t.amount() >= minAmount))
+                && ((maxAmount == null) || (t.amount() <= maxAmount));
+        }
+
+        FilterOptions override(FilterOptions other) {
+            return new FilterOptions(
+                Optional.ofNullable(after).orElseGet(other::after),
+                Optional.ofNullable(before).orElseGet(other::before),
+                Optional.ofNullable(description).orElseGet(other::description),
+                Optional.ofNullable(vendor).orElseGet(other::vendor),
+                Optional.ofNullable(minAmount).orElseGet(other::minAmount),
+                Optional.ofNullable(maxAmount).orElseGet(other::maxAmount));
+        }
     }
 
     private static final class TransactionList extends AbstractListBox<Transaction, TransactionList> {
