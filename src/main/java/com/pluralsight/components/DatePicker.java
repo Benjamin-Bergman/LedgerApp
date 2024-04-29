@@ -14,7 +14,7 @@ import java.util.function.*;
 public final class DatePicker extends Panel {
     private final IntPicker dayPicker, yearPicker;
     private final MonthPicker monthPicker;
-    private Consumer<LocalDate> listener;
+    private Consumer<? super LocalDate> listener;
 
     /**
      * Creates a new instance whose default value is {@code LocalDate.now()}.
@@ -91,7 +91,7 @@ public final class DatePicker extends Panel {
      *
      * @param listener The listener to set.
      */
-    public void setChangeListener(Consumer<LocalDate> listener) {
+    public void setChangeListener(Consumer<? super LocalDate> listener) {
         this.listener = listener;
     }
 

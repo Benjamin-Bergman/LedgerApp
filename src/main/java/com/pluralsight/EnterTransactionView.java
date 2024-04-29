@@ -19,6 +19,7 @@ final class EnterTransactionView extends BasicWindow {
     private final DatePicker dateInput;
     private final TimePicker timeInput;
 
+    @SuppressWarnings("FeatureEnvy")
     EnterTransactionView(boolean credit, TransactionDatabase db) {
         super(credit ? "Enter a Credit" : "Enter a Debit");
 
@@ -45,12 +46,10 @@ final class EnterTransactionView extends BasicWindow {
         timeInput = new TimePicker();
         panel.addComponent(timeInput);
 
-        itemInput.setTextChangeListener((text, user) -> {
-            itemInput.setBad(text.isEmpty());
-        });
-        vendorInput.setTextChangeListener((text, user) -> {
-            vendorInput.setBad(text.isEmpty());
-        });
+        itemInput.setTextChangeListener((text, user) ->
+            itemInput.setBad(text.isEmpty()));
+        vendorInput.setTextChangeListener((text, user) ->
+            vendorInput.setBad(text.isEmpty()));
 
         panel.addComponent(new Button("Exit", this::tryClose));
         panel.addComponent(new Button("Submit", () -> trySubmit(credit, db)));
@@ -86,6 +85,7 @@ final class EnterTransactionView extends BasicWindow {
             close();
     }
 
+    @SuppressWarnings("FeatureEnvy")
     private void trySubmit(boolean credit, TransactionDatabase db) {
         var amtBad = amountInput.isBad();
         var dscBad = itemInput.isBad();
