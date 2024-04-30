@@ -38,6 +38,10 @@ The app runs in a TUI (Terminal User Interface) that should be intuitive to use.
 - [Lanterna](https://github.com/mabe02/lanterna), a TUI library for Java
 - [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 
+## Guiding User Stories
+
+View the guiding user stories [here](https://github.com/users/Benjamin-Bergman/projects/2).
+
 # Demo
 
 [![Demo](https://asciinema.org/a/rGIYM7Xyx08iWrlqX441u4thv.svg)](https://asciinema.org/a/rGIYM7Xyx08iWrlqX441u4thv?startAt=10&autoplay=1)
