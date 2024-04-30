@@ -49,3 +49,4 @@ The app runs in a TUI (Terminal User Interface) that should be intuitive to use.
 - Persistent filter settings
 - Running totals for reports
 - Scheduled/recurring transactions
+- Lazier file writing
