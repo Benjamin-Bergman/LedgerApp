@@ -25,7 +25,7 @@ final class Program {
 
             screen.stopScreen();
         } catch (IOException e) {
-            System.err.println("An error occurred: " + e.getMessage());
+            System.err.println("An error occurred: ${e.getMessage()}");
         }
     }
 }

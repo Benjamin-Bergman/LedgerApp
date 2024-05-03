@@ -116,7 +116,7 @@ final class TransactionListView extends BasicWindow {
         }
 
         //noinspection HardcodedFileSeparator
-        liveReports.setText("Showing %d/%d transactions totalling $%.2f".formatted(visible, total, totalAmount));
+        liveReports.setText("Showing $visible/$total transactions totalling $%.2f".formatted(totalAmount));
     }
 
     /**

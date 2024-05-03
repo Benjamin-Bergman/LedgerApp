@@ -35,7 +35,7 @@ final class ReportView extends DialogWindow {
                 (t1, t2) -> (count:t1.count + t2.count, total:t1.total + t2.total));
 
         var display = new Panel();
-        display.addComponent(new Label("%d transactions totalling $%.2f".formatted(result.count, result.total)));
+        display.addComponent(new Label("${result.count} transactions totalling $%.2f".formatted(result.total)));
 
         var buttons = new Panel(new LinearLayout(Direction.HORIZONTAL));
         display.addComponent(buttons);

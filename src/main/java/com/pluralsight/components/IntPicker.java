@@ -69,8 +69,7 @@ public class IntPicker extends AbstractInteractableComponent<IntPicker> {
         this.maxValue = maxValue;
         //noinspection NumericCastThatLosesPrecision
         maxDigits = (int) Math.log10(maxValue) + 1;
-        //noinspection StringConcatenationMissingWhitespace
-        format = "%0" + maxDigits + 'd';
+        format = "%0${maxDigits}d";
         //noinspection NumericCastThatLosesPrecision
         weakMax = (int) Math.pow(10, maxDigits);
         invalidate();

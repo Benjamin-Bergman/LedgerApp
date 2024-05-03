@@ -7,7 +7,11 @@
     <list default="true" id="c299f1b3-1c16-4d92-b358-002827661ff3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/Program.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/Program.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/ReportView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/ReportView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/Transaction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/TransactionListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/TransactionListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/components/IntPicker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/components/IntPicker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,34 +47,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Program.executor": "Run",
-    "JUnit.All in LedgerApp.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "code.cleanup.on.save": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Work/Documents/YearUp/Java/LedgerApp",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.stylelint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "rearrange.code.on.save": "true",
-    "settings.editor.selected.configurable": "manifold.ij.extensions.ManConfigurable",
-    "update.copyright.on.save": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Program.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in LedgerApp.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Work/Documents/YearUp/Java/LedgerApp&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;manifold.ij.extensions.ManConfigurable&quot;,
+    &quot;update.copyright.on.save&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.pluralsight" />
@@ -94,7 +98,7 @@
       <recent name="com.pluralsight" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Program">
+  <component name="RunManager" selected="JUnit.All in LedgerApp">
     <configuration name="Program" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.pluralsight.Program" />
       <module name="LedgerApp" />
@@ -118,8 +122,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Program" />
         <item itemvalue="JUnit.All in LedgerApp" />
+        <item itemvalue="Application.Program" />
       </list>
     </recent_temporary>
   </component>
