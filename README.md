@@ -36,6 +36,7 @@ The app runs in a TUI (Terminal User Interface) that should be intuitive to use.
 
 - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [Lanterna](https://github.com/mabe02/lanterna), a TUI library for Java
+- [Mainfold](http://manifold.systems/), a set of compiler plugins for Java
 - [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 
 ## Guiding User Stories

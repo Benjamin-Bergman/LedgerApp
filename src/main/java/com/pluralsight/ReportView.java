@@ -30,12 +30,12 @@ final class ReportView extends DialogWindow {
             .stream(db.spliterator(), true)
             .filter(reportType)
             .reduce(
-                new Tuple(0, 0),
-                (tup, tra) -> new Tuple(tup.count() + 1, tup.total() + tra.amount()),
-                (t1, t2) -> new Tuple(t1.count() + t2.count(), t1.total() + t2.total()));
+                (count:0, total:0.0),
+                (tup, tra) -> (count:tup.count + 1, total:tup.total + tra.amount()),
+                (t1, t2) -> (count:t1.count + t2.count, total:t1.total + t2.total));
 
         var display = new Panel();
-        display.addComponent(new Label("%d transactions totalling $%.2f".formatted(result.count(), result.total())));
+        display.addComponent(new Label("%d transactions totalling $%.2f".formatted(result.count, result.total)));
 
         var buttons = new Panel(new LinearLayout(Direction.HORIZONTAL));
         display.addComponent(buttons);
@@ -96,9 +96,5 @@ final class ReportView extends DialogWindow {
         FilterOptions getFilter() {
             return filter;
         }
-    }
-
-    @SuppressWarnings("NewClassNamingConvention")
-    private record Tuple(int count, double total) {
     }
 }
