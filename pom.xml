@@ -37,6 +37,11 @@
             <artifactId>manifold-tuple-rt</artifactId>
             <version>${manifold.version}</version>
         </dependency>
+        <dependency>
+            <groupId>systems.manifold</groupId>
+            <artifactId>manifold-ext-rt</artifactId>
+            <version>${manifold.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -87,6 +92,11 @@
                         <path>
                             <groupId>systems.manifold</groupId>
                             <artifactId>manifold-tuple</artifactId>
+                            <version>${manifold.version}</version>
+                        </path>
+                        <path>
+                            <groupId>systems.manifold</groupId>
+                            <artifactId>manifold-ext</artifactId>
                             <version>${manifold.version}</version>
                         </path>
                     </annotationProcessorPaths>

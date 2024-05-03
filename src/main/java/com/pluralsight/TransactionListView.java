@@ -139,8 +139,8 @@ final class TransactionListView extends BasicWindow {
         @Override
         public boolean test(Transaction t) {
             return
-                ((after == null) || !t.date().isBefore(after))
-                && ((before == null) || t.date().isBefore(before))
+                ((after == null) || t.date() >= after)
+                && ((before == null) || t.date() < before)
                 && ((description == null) || t.description().toLowerCase().contains(description.toLowerCase()))
                 && ((vendor == null) || t.vendor().toLowerCase().contains(vendor.toLowerCase()))
                 && ((minAmount == null) || (Math.abs(t.amount()) >= minAmount))
